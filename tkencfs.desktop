@@ -1,0 +1,13 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+
+Name=Encrypted directories
+Name[fr]=Répertoires chiffrés
+Comment=TkEncFS encrypted directories
+Comment[fr]=Répertoires chiffrés avec TkEncFS
+
+Categories=Utility
+Exec=tkencfs
+Icon=tkencfs
