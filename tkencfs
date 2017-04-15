@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-__version__ = "0.7"
 req_version=(3,6)
 import sys
 assert(sys.version_info[:2] >= req_version)
