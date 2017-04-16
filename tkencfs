@@ -144,7 +144,9 @@ class Application(tk.Frame):
       mkdir=True
     else:
       mkdir=False
-    password=simpledialog.askstring("Password","Password",parent=self.master,show='*')  
+    self.lock=True
+    password=simpledialog.askstring(_("Password"),_("Password"),parent=self.master,show='*')  
+    self.lock=False
     cmd =f"encfs --standard -S {dirs[0]} {dirs[1]}"# call encfs without prompting for password
     args=shlex.split(cmd)
     proc = subprocess.Popen(args,  

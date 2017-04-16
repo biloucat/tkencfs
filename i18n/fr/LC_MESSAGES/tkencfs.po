@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 19:11+0200\n"
+"POT-Creation-Date: 2017-04-16 22:12+0200\n"
 "PO-Revision-Date: 2017-04-16 14:44+0200\n"
 "Last-Translator:  <biloucat@gmail.com>\n"
 "Language-Team: French\n"
@@ -70,26 +70,30 @@ msgstr "répertoire à monter"
 msgid "mounted"
 msgstr "monté"
 
-#: tkencfs:138 tkencfs:159 tkencfs:161 tkencfs:171
+#: tkencfs:140 tkencfs:163 tkencfs:165 tkencfs:175
 msgid "Mount"
 msgstr "Monter"
 
-#: tkencfs:186 tkencfs:191
+#: tkencfs:148
+msgid "Password"
+msgstr "Mot de passe"
+
+#: tkencfs:190 tkencfs:195
 msgid "Unmount"
 msgstr "Démonter"
 
-#: tkencfs:194
+#: tkencfs:198
 msgid "New directory"
 msgstr "Nouveau répertoire"
 
-#: tkencfs:194
+#: tkencfs:198
 msgid "Crypted directory:"
 msgstr "Répertoire crypté:"
 
-#: tkencfs:202 tkencfs:208 tkencfs:212
+#: tkencfs:206 tkencfs:212 tkencfs:216
 msgid "Adding crypted directory"
 msgstr "Ajout d'un répertoire crypté"
 
-#: tkencfs:228
+#: tkencfs:232
 msgid "Deleting empty directory"
 msgstr "Suppression d'un répertoire vide"
