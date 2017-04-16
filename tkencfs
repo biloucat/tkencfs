@@ -15,7 +15,7 @@ import tkinter.ttk as ttk
 
 #https://blog.nicolargo.com/2012/11/internationaliser-ses-programmes-python.html
 import gettext
-gettext.install('tkencfs','/home/pierre/Projets/python/Tkinter/tkencfs/i18n')
+gettext.install('tkencfs')
 #pour générer correctement le .pot avec xgettext
 _("Add"),_("Remove"),_('must not exist'),_('successfully mounted'),_('successfully unmounted'),_('must not contain characters in')
 _("already in the list"),_("Directory not empty")
@@ -113,9 +113,14 @@ class Application(tk.Frame):
       raise RuntimeError(f"{result} {_('must not exist')}")
     else:
       return result
-
+  def allUnmounted(self):
+    marks=[self.multilistbox.tree.item(item,'values')[2] for item in self.multilistbox.tree.get_children()]
+    if 'X' in marks:
+      messagebox.showerror("Close Application",_("All directories must be unmounted before to quit"))
+      return False
+    return True
   def onClose(self):
-    if not self.lock:
+    if not self.lock and self.allUnmounted():
       self.master.destroy()
   def onSelect(self,event):
     dirs=self.multilistbox.tree.item(self.multilistbox.tree.selection()[0],'values')

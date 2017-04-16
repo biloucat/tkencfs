@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 22:12+0200\n"
+"POT-Creation-Date: 2017-04-16 22:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,30 +69,34 @@ msgstr ""
 msgid "mounted"
 msgstr ""
 
-#: tkencfs:140 tkencfs:163 tkencfs:165 tkencfs:175
+#: tkencfs:119
+msgid "All directories must be unmounted before to quit"
+msgstr ""
+
+#: tkencfs:145 tkencfs:168 tkencfs:170 tkencfs:180
 msgid "Mount"
 msgstr ""
 
-#: tkencfs:148
+#: tkencfs:153
 msgid "Password"
 msgstr ""
 
-#: tkencfs:190 tkencfs:195
+#: tkencfs:195 tkencfs:200
 msgid "Unmount"
 msgstr ""
 
-#: tkencfs:198
+#: tkencfs:203
 msgid "New directory"
 msgstr ""
 
-#: tkencfs:198
+#: tkencfs:203
 msgid "Crypted directory:"
 msgstr ""
 
-#: tkencfs:206 tkencfs:212 tkencfs:216
+#: tkencfs:211 tkencfs:217 tkencfs:221
 msgid "Adding crypted directory"
 msgstr ""
 
-#: tkencfs:232
+#: tkencfs:237
 msgid "Deleting empty directory"
 msgstr ""
