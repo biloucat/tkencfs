@@ -1,0 +1,95 @@
+# French translations for PACKAGE package
+# Traductions françaises du paquet PACKAGE.
+# Copyright (C) 2017 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#  <biloucat@gmail.com>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-04-16 19:11+0200\n"
+"PO-Revision-Date: 2017-04-16 14:44+0200\n"
+"Last-Translator:  <biloucat@gmail.com>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: tkencfs:20
+msgid "Add"
+msgstr "Ajouter"
+
+#: tkencfs:20
+msgid "Remove"
+msgstr "Enlever"
+
+#: tkencfs:20
+msgid "must not exist"
+msgstr "ne doit pas exister"
+
+#: tkencfs:20
+msgid "successfully mounted"
+msgstr "monté sans erreur"
+
+#: tkencfs:20
+msgid "successfully unmounted"
+msgstr "démonté sans erreur"
+
+#: tkencfs:20
+msgid "must not contain characters in"
+msgstr "ne doit pas contenir de caractères parmi"
+
+#: tkencfs:21
+msgid "already in the list"
+msgstr "est déjà dans la liste"
+
+#: tkencfs:21
+msgid "Directory not empty"
+msgstr "Répertoire non vide"
+
+#: tkencfs:82
+msgid "Gui for EncFS"
+msgstr "Gui pour EncFS"
+
+#: tkencfs:89
+msgid "Paths to encrypted and mounted directories"
+msgstr "Chemins vers les répertoires cryptés et montés"
+
+#: tkencfs:99
+msgid "encrypted directory"
+msgstr "répertoire crypté"
+
+#: tkencfs:99
+msgid "directory to mount"
+msgstr "répertoire à monter"
+
+#: tkencfs:99
+msgid "mounted"
+msgstr "monté"
+
+#: tkencfs:138 tkencfs:159 tkencfs:161 tkencfs:171
+msgid "Mount"
+msgstr "Monter"
+
+#: tkencfs:186 tkencfs:191
+msgid "Unmount"
+msgstr "Démonter"
+
+#: tkencfs:194
+msgid "New directory"
+msgstr "Nouveau répertoire"
+
+#: tkencfs:194
+msgid "Crypted directory:"
+msgstr "Répertoire crypté:"
+
+#: tkencfs:202 tkencfs:208 tkencfs:212
+msgid "Adding crypted directory"
+msgstr "Ajout d'un répertoire crypté"
+
+#: tkencfs:228
+msgid "Deleting empty directory"
+msgstr "Suppression d'un répertoire vide"

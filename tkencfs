@@ -1,7 +1,9 @@
-#!/usr/bin/python3
+#!/usr/bin/python
+
 req_version=(3,6)
 import sys
 assert(sys.version_info[:2] >= req_version)
+
 import os
 import subprocess
 import shlex
@@ -10,7 +12,14 @@ import tkinter.messagebox as messagebox
 import tkinter.simpledialog as simpledialog
 import tkinter.font as tkFont
 import tkinter.ttk as ttk
-      
+
+#https://blog.nicolargo.com/2012/11/internationaliser-ses-programmes-python.html
+import gettext
+gettext.install('tkencfs','/home/pierre/Projets/python/Tkinter/tkencfs/i18n')
+#pour générer correctement le .pot avec xgettext
+_("Add"),_("Remove"),_('must not exist'),_('successfully mounted'),_('successfully unmounted'),_('must not contain characters in')
+_("already in the list"),_("Directory not empty")
+
 class MultiColumnListbox(ttk.Frame):
   """use a ttk.TreeView as a multicolumn ListBox"""
   nblines=5
@@ -50,7 +59,7 @@ class ToolBar(tk.Frame):
     super().__init__(parent)
     self.buttons={}
     for (text,state,command) in seqbuttons:
-      b=tk.Button(self, text=text, state=state, width=10, command=command)
+      b=tk.Button(self, text=_(text), state=state, width=10, command=command)
       b.pack(side=tk.LEFT, padx=2, pady=2)
       self.buttons[text]=b
 class Application(tk.Frame):
@@ -70,30 +79,26 @@ class Application(tk.Frame):
     #Create frame to contain all others
     super().__init__(parent)
     parent.option_add("*Dialog.msg.wrapLength", "15cm")
-    parent.title('Gui for EncFs')
+    parent.title(_('Gui for EncFS'))
     self.lock=False
     parent.protocol("WM_DELETE_WINDOW", self.onClose)
     self.userpath=os.path.join(os.path.expanduser("~") ,'.tkencfs')
     pathtofiles=os.path.join(self.userpath,'Encrypted_dirs')
     os.makedirs(pathtofiles,mode=0o755,exist_ok=True)
     os.makedirs(os.path.join(self.userpath,'Mounted_dirs'),mode=0o755,exist_ok=True)
-    self.labelpath=tk.Label(parent, text='Chemins vers les répertoires cryptés et montés',font=tkFont.Font(weight='bold'))
+    self.labelpath=tk.Label(parent, text=_('Paths to encrypted and mounted directories'),font=tkFont.Font(weight='bold'))
     self.labelpath.pack()
     crypts=[]
     with os.scandir(pathtofiles) as it:
       for entry in it:
         if entry.is_dir(follow_symlinks=False):
-          try:
-            mount=self.mountDir(entry.name)
-          except RuntimeError as err:
-            messagebox.showerror(f"scan de {pathtofiles}",err.args[0])
-          else:
-            l=[os.path.join(pathtofiles,entry.name),mount]
-            l.append(self.selectMark(mount))
-            crypts.append(l)
-    self.multilistbox = MultiColumnListbox(parent,("répertoire crypté","répertoire à monter","monté"),crypts,self.onSelect)
+          mount=self.mountDir(entry.name)
+          l=[os.path.join(pathtofiles,entry.name),mount]
+          l.append(self.selectMark(mount))
+          crypts.append(l)
+    self.multilistbox = MultiColumnListbox(parent,(_("encrypted directory"),_("directory to mount"),_("mounted")),crypts,self.onSelect)
     self.multilistbox.pack()
-    self.toolbar=ToolBar(parent,(("Ajouter",tk.NORMAL,self.onAdd),("Enlever",tk.DISABLED,self.onDelete),("Monter",tk.DISABLED,self.encfsmount),("Démonter",tk.DISABLED,self.encfsumount)))
+    self.toolbar=ToolBar(parent,(("Add",tk.NORMAL,self.onAdd),("Remove",tk.DISABLED,self.onDelete),("Mount",tk.DISABLED,self.encfsmount),("Unmount",tk.DISABLED,self.encfsumount)))
     self.toolbar.pack(side=tk.BOTTOM)
     #http://stackoverflow.com/questions/10448882/how-do-i-set-a-minimum-window-size-in-tkinter
     #minsize empêche width de grandir si ajout de grands noms dans multilistbox !!!
@@ -105,7 +110,7 @@ class Application(tk.Frame):
     basename=os.path.basename(cryptedDir)
     result=os.path.join(self.userpath,'Mounted_dirs',os.path.basename(cryptedDir))
     if strict and os.access(result, os.F_OK):
-      raise RuntimeError(f"{result} must not exist")
+      raise RuntimeError(f"{result} {_('must not exist')}")
     else:
       return result
 
@@ -115,22 +120,22 @@ class Application(tk.Frame):
   def onSelect(self,event):
     dirs=self.multilistbox.tree.item(self.multilistbox.tree.selection()[0],'values')
     if dirs[2]=='X':
-      self.toolbar.buttons["Démonter"].configure(state=tk.NORMAL)
-      self.toolbar.buttons["Monter"].configure(state=tk.DISABLED)
-      self.toolbar.buttons["Enlever"].configure(state=tk.DISABLED)
+      self.toolbar.buttons["Unmount"].configure(state=tk.NORMAL)
+      self.toolbar.buttons["Mount"].configure(state=tk.DISABLED)
+      self.toolbar.buttons["Remove"].configure(state=tk.DISABLED)
     else:
-      self.toolbar.buttons["Démonter"].configure(state=tk.DISABLED)
-      self.toolbar.buttons["Monter"].configure(state=tk.NORMAL)
+      self.toolbar.buttons["Unmount"].configure(state=tk.DISABLED)
+      self.toolbar.buttons["Mount"].configure(state=tk.NORMAL)
       if not os.access(dirs[0], os.F_OK) or os.listdir(dirs[0])==[]:
-        self.toolbar.buttons["Enlever"].configure(state=tk.NORMAL)
+        self.toolbar.buttons["Remove"].configure(state=tk.NORMAL)
       else:
-        self.toolbar.buttons["Enlever"].configure(state=tk.DISABLED)
+        self.toolbar.buttons["Remove"].configure(state=tk.DISABLED)
   def encfsmount(self):
     dirs=self.multilistbox.tree.item(self.multilistbox.tree.selection()[0],'values')
     try:
       os.mkdir(self.mountDir(dirs[0],strict=True),mode=0o700)
     except RuntimeError as err:
-      messagebox.showerror("mount",err.args[0])
+      messagebox.showerror(_("Mount"),err.args[0])
       return
     if not os.access(dirs[0], os.F_OK):  # check if crypted directory  exist
       os.mkdir(dirs[0],0o755)               # if not create the directory
@@ -151,19 +156,19 @@ class Application(tk.Frame):
       dirs=dirs[:-1]+('X',)
       self.multilistbox.tree.item(self.multilistbox.tree.selection()[0],values=dirs)
       if stdout_value:
-        messagebox.showinfo("mount",stdout_value)
+        messagebox.showinfo(_("Mount"),stdout_value)
       else: 
-        messagebox.showinfo("mount",f"{dirs[1]} successfully mounted")
-      self.toolbar.buttons["Démonter"].configure(state=tk.NORMAL)
-      self.toolbar.buttons["Monter"].configure(state=tk.DISABLED)
-      self.toolbar.buttons["Enlever"].configure(state=tk.DISABLED)
+        messagebox.showinfo(_("Mount"),f"{dirs[1]} {_('successfully mounted')}")
+      self.toolbar.buttons["Unmount"].configure(state=tk.NORMAL)
+      self.toolbar.buttons["Mount"].configure(state=tk.DISABLED)
+      self.toolbar.buttons["Remove"].configure(state=tk.DISABLED)
       #open mounted directory
       subprocess.run(["xdg-open",dirs[1]])# subprocess automaticaly closed
     else:
       os.rmdir(dirs[1])
       if mkdir:
         os.rmdir(dirs[0])
-      messagebox.showerror("mount",f"returncode:{proc.returncode}\nstdout:{stdout_value}\nstderr:{stderr_value}")
+      messagebox.showerror(_("Mount"),f"returncode:{proc.returncode}\nstdout:{stdout_value}\nstderr:{stderr_value}")
 
   def encfsumount(self):
     dirs=self.multilistbox.tree.item(self.multilistbox.tree.selection()[0],'values')
@@ -178,33 +183,33 @@ class Application(tk.Frame):
       os.rmdir(dirs[1])
       dirs=dirs[:-1]+('',)
       self.multilistbox.tree.item(self.multilistbox.tree.selection()[0],values=dirs)
-      messagebox.showinfo("umount",f"{dirs[1]} successfully umounted")
-      self.toolbar.buttons["Démonter"].configure(state=tk.DISABLED)
-      self.toolbar.buttons["Monter"].configure(state=tk.NORMAL)
-      self.toolbar.buttons["Enlever"].configure(state=tk.DISABLED)
+      messagebox.showinfo(_("Unmount"),f"{dirs[1]} {_('successfully unmounted')}")
+      self.toolbar.buttons["Unmount"].configure(state=tk.DISABLED)
+      self.toolbar.buttons["Mount"].configure(state=tk.NORMAL)
+      self.toolbar.buttons["Remove"].configure(state=tk.DISABLED)
     else:  
-      messagebox.showerror("umount",f"returncode:{completproc.returncode}\nstdout:{completproc.stdout}\nstderr:{completproc.stderr}")
+      messagebox.showerror(_("Unmount"),f"returncode:{completproc.returncode}\nstdout:{completproc.stdout}\nstderr:{completproc.stderr}")
   def onAdd(self):
     self.lock=True
-    newcrypt=simpledialog.askstring("Nouveau répertoire","Répertoire crypté:",parent=self.master)
+    newcrypt=simpledialog.askstring(_("New directory"),_("Crypted directory:"),parent=self.master)
     self.lock=False
     if newcrypt:
       try:
         for c in self.badcharacters:
           if c in newcrypt:
-            raise RuntimeError(f"\"{newcrypt}\" must not contain characters in '{self.badcharacters}'")
+            raise RuntimeError(f"\"{newcrypt}\" {_('must not contain characters in')} '{self.badcharacters}'")
       except RuntimeError as err:
-        messagebox.showerror("Add crypted directory",err.args[0])
+        messagebox.showerror(_("Adding crypted directory"),err.args[0])
         return
       newpath=os.path.join(self.userpath,'Encrypted_dirs',newcrypt)
       try:
         mountdir=self.mountDir(newpath,strict=True)
       except RuntimeError as err:
-        messagebox.showerror("Add crypted directory",err.args[0])
+        messagebox.showerror(_("Adding crypted directory"),err.args[0])
         return
       crypts=[self.multilistbox.tree.item(item,'values')[0] for item in self.multilistbox.tree.get_children()]
       if newpath in crypts:
-        messagebox.showerror("Add crypted directory",f"{newpath} already in the list")
+        messagebox.showerror(_("Adding crypted directory"),f"{newpath} {_('already in the list')}")
         return
       item=[newpath,mountdir,'']
       itemid=self.multilistbox.tree.insert('', 'end', values=item)
@@ -220,12 +225,12 @@ class Application(tk.Frame):
       try:
         os.rmdir(dirs[0])
       except Exception as e:
-        messagebox.showerror("delete directory",e)
+        messagebox.showerror(_("Deleting empty directory"),_(e.args[1]))
         return
     self.multilistbox.tree.delete(self.multilistbox.tree.selection())
     #no selection anymore
-    self.toolbar.buttons["Enlever"].configure(state=tk.DISABLED) 
-    self.toolbar.buttons["Monter"].configure(state=tk.DISABLED)
+    self.toolbar.buttons["Remove"].configure(state=tk.DISABLED) 
+    self.toolbar.buttons["Mount"].configure(state=tk.DISABLED)
 ## Main program
 if __name__ == "__main__":
   Application(tk.Tk())
