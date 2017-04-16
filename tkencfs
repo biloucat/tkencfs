@@ -131,6 +131,8 @@ class Application(tk.Frame):
       else:
         self.toolbar.buttons["Remove"].configure(state=tk.DISABLED)
   def encfsmount(self):
+    def err(prefix,msg):
+      return "\n{0}: {1}".format(prefix,msg) if msg else ''
     dirs=self.multilistbox.tree.item(self.multilistbox.tree.selection()[0],'values')
     try:
       os.mkdir(self.mountDir(dirs[0],strict=True),mode=0o700)
@@ -168,7 +170,7 @@ class Application(tk.Frame):
       os.rmdir(dirs[1])
       if mkdir:
         os.rmdir(dirs[0])
-      messagebox.showerror(_("Mount"),f"returncode:{proc.returncode}\nstdout:{stdout_value}\nstderr:{stderr_value}")
+      messagebox.showerror(_("Mount"),f"returncode:{proc.returncode}{err('stdout',stdout_value)}{err('stderr',stderr_value)}")
 
   def encfsumount(self):
     dirs=self.multilistbox.tree.item(self.multilistbox.tree.selection()[0],'values')
