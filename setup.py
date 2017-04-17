@@ -1,3 +1,7 @@
+import sys
+assert(sys.version_info[:2] >= (3,6))
+import tkinter
+assert(tkinter.TkVersion >= 8.6)
 from setuptools import setup
 setup(
     name="tkencfs",

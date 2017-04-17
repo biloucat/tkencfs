@@ -1,9 +1,5 @@
 #!/usr/bin/python
 
-req_version=(3,6)
-import sys
-assert(sys.version_info[:2] >= req_version)
-
 import os
 import subprocess
 import shlex
