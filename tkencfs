@@ -19,12 +19,12 @@ _("already in the list"),_("Directory not empty")
 class MultiColumnListbox(ttk.Frame):
   """use a ttk.TreeView as a multicolumn ListBox"""
   nblines=5
-  def __init__(self,parent,headers,crypts,onSelect):
+  def __init__(self,parent,headers,crypts,onSelect,onDoubleClick):
     super().__init__(parent)
-    self._setup_widgets(headers,onSelect)
+    self._setup_widgets(headers,onSelect,onDoubleClick)
     self._build_tree(headers,crypts)
 
-  def _setup_widgets(self,headers,onSelect):
+  def _setup_widgets(self,headers,onSelect,onDoubleClick):
     # create a treeview with dual scrollbars
     self.tree = ttk.Treeview(columns=headers, show="headings")
     vsb = ttk.Scrollbar(orient="vertical", command=self.tree.yview)
@@ -32,6 +32,7 @@ class MultiColumnListbox(ttk.Frame):
     self.tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
     self.tree.grid(column=0, row=0, sticky='nsew', in_=self)
     self.tree.bind("<<TreeviewSelect>>",onSelect)
+    self.tree.bind("<Double-1>", onDoubleClick)
     vsb.grid(column=1, row=0, sticky='ns', in_=self)
     hsb.grid(column=0, row=1, sticky='ew', in_=self)
     self.grid_columnconfigure(0, weight=1)
@@ -92,7 +93,7 @@ class Application(tk.Frame):
           l=[os.path.join(pathtofiles,entry.name),mount]
           l.append(self.selectMark(mount))
           crypts.append(l)
-    self.multilistbox = MultiColumnListbox(parent,(_("encrypted directory"),_("directory to mount"),_("mounted")),crypts,self.onSelect)
+    self.multilistbox = MultiColumnListbox(parent,(_("encrypted directory"),_("directory to mount"),_("mounted")),crypts,self.onSelect, self.onDoubleClick)
     self.multilistbox.pack()
     self.toolbar=ToolBar(parent,(("Add",tk.NORMAL,self.onAdd),("Remove",tk.DISABLED,self.onDelete),("Mount",tk.DISABLED,self.encfsmount),("Unmount",tk.DISABLED,self.encfsumount)))
     self.toolbar.pack(side=tk.BOTTOM)
@@ -131,6 +132,12 @@ class Application(tk.Frame):
         self.toolbar.buttons["Remove"].configure(state=tk.NORMAL)
       else:
         self.toolbar.buttons["Remove"].configure(state=tk.DISABLED)
+  def onDoubleClick(self,event):
+    item = self.multilistbox.tree.identify('item',event.x,event.y)
+    if item:
+      mounted=self.multilistbox.tree.item(item,'values')[2]=='X'
+      self.encfsumount() if mounted else self.encfsmount()
+    
   def encfsmount(self):
     def err(prefix,msg):
       return "\n{0}: {1}".format(prefix,msg) if msg else ''
@@ -146,7 +153,7 @@ class Application(tk.Frame):
     else:
       mkdir=False
     self.lock=True
-    password=simpledialog.askstring(_("Password"),_("Password")+":",parent=self.master,show='*')  
+    password=simpledialog.askstring(f"EncFS:{os.path.basename(dirs[0])}",_("Password")+":",parent=self.master,show='*')  
     self.lock=False
     cmd =f"encfs --standard -S {dirs[0]} {dirs[1]}"# call encfs without prompting for password
     args=shlex.split(cmd)
