@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 22:52+0200\n"
+"POT-Creation-Date: 2017-04-20 12:18+0200\n"
 "PO-Revision-Date: 2017-04-16 14:44+0200\n"
 "Last-Translator:  <biloucat@gmail.com>\n"
 "Language-Team: French\n"
@@ -18,86 +18,94 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: tkencfs:20
+#: tkencfs:16
 msgid "Add"
 msgstr "Ajouter"
 
-#: tkencfs:20
+#: tkencfs:16
 msgid "Remove"
 msgstr "Enlever"
 
-#: tkencfs:20
+#: tkencfs:16
 msgid "must not exist"
 msgstr "ne doit pas exister"
 
-#: tkencfs:20
+#: tkencfs:16
 msgid "successfully mounted"
 msgstr "monté sans erreur"
 
-#: tkencfs:20
+#: tkencfs:16
 msgid "successfully unmounted"
 msgstr "démonté sans erreur"
 
-#: tkencfs:20
+#: tkencfs:16
 msgid "must not contain characters in"
 msgstr "ne doit pas contenir de caractères parmi"
 
-#: tkencfs:21
+#: tkencfs:17
 msgid "already in the list"
 msgstr "est déjà dans la liste"
 
-#: tkencfs:21
+#: tkencfs:17
 msgid "Directory not empty"
 msgstr "Répertoire non vide"
 
-#: tkencfs:82
+#: tkencfs:85
 msgid "Gui for EncFS"
 msgstr "Gui pour EncFS"
 
-#: tkencfs:89
+#: tkencfs:92
 msgid "Paths to encrypted and mounted directories"
 msgstr "Chemins vers les répertoires cryptés et montés"
 
-#: tkencfs:99
+#: tkencfs:102
 msgid "encrypted directory"
 msgstr "répertoire crypté"
 
-#: tkencfs:99
+#: tkencfs:102
 msgid "directory to mount"
 msgstr "répertoire à monter"
 
-#: tkencfs:99
+#: tkencfs:102
 msgid "mounted"
 msgstr "monté"
 
-#: tkencfs:119
+#: tkencfs:124
+msgid "Close Application"
+msgstr "Fermeture de l'application"
+
+#: tkencfs:124
 msgid "All directories must be unmounted before to quit"
 msgstr "Tous les répertoires doivent être démontés avant de quitter"
 
-#: tkencfs:145 tkencfs:168 tkencfs:170 tkencfs:180
+#: tkencfs:156
+msgid "Region"
+msgstr "Région"
+
+#: tkencfs:171 tkencfs:194 tkencfs:196 tkencfs:206
 msgid "Mount"
 msgstr "Monter"
 
-#: tkencfs:153
+#: tkencfs:179
 msgid "Password"
 msgstr "Mot de passe"
 
-#: tkencfs:195 tkencfs:200
+#: tkencfs:221 tkencfs:226
 msgid "Unmount"
 msgstr "Démonter"
 
-#: tkencfs:203
+#: tkencfs:229
 msgid "New directory"
 msgstr "Nouveau répertoire"
 
-#: tkencfs:203
+#: tkencfs:229
 msgid "Crypted directory:"
 msgstr "Répertoire crypté:"
 
-#: tkencfs:211 tkencfs:217 tkencfs:221
+#: tkencfs:237 tkencfs:243 tkencfs:247
 msgid "Adding crypted directory"
 msgstr "Ajout d'un répertoire crypté"
 
-#: tkencfs:237
+#: tkencfs:263
 msgid "Deleting empty directory"
 msgstr "Suppression d'un répertoire vide"

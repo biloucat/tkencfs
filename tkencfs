@@ -16,6 +16,8 @@ gettext.install('tkencfs')
 _("Add"),_("Remove"),_('must not exist'),_('successfully mounted'),_('successfully unmounted'),_('must not contain characters in')
 _("already in the list"),_("Directory not empty")
 
+#http://stackoverflow.com/questions/5286093/display-listbox-with-columns-using-tkinter
+#http://stackoverflow.com/questions/31584415/how-to-bind-an-action-to-the-heading-of-a-tkinter-treeview-in-python
 class MultiColumnListbox(ttk.Frame):
   """use a ttk.TreeView as a multicolumn ListBox"""
   nblines=5
@@ -62,6 +64,11 @@ class ToolBar(tk.Frame):
 class Application(tk.Frame):
   #https://en.wikipedia.org/wiki/Filename
   badcharacters=' \'/"'
+  #http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/event-handlers.html
+  mask={'SHIFT':0x0001,'CTRL':0x0004,'L_ALT':0x0008,'WIN':0x0050}
+  @classmethod
+  def key(self,keysymb,event):
+    return (event.state & self.mask[keysymb]) != 0
   @staticmethod
   def selectMark(directory):
     with open('/etc/mtab') as mtabfile: # now read the file containing persistent data or being empty
@@ -110,14 +117,13 @@ class Application(tk.Frame):
       raise RuntimeError(f"{result} {_('must not exist')}")
     else:
       return result
-  def allUnmounted(self):
+  def onClose(self):
+    if self.lock:
+      return
     marks=[self.multilistbox.tree.item(item,'values')[2] for item in self.multilistbox.tree.get_children()]
     if 'X' in marks:
-      messagebox.showerror("Close Application",_("All directories must be unmounted before to quit"))
-      return False
-    return True
-  def onClose(self):
-    if not self.lock and self.allUnmounted():
+      messagebox.showerror(_("Close Application"),_("All directories must be unmounted before to quit"))
+    else:# all unmounted
       self.master.destroy()
   def onSelect(self,event):
     dirs=self.multilistbox.tree.item(self.multilistbox.tree.selection()[0],'values')
@@ -133,11 +139,29 @@ class Application(tk.Frame):
       else:
         self.toolbar.buttons["Remove"].configure(state=tk.DISABLED)
   def onDoubleClick(self,event):
-    item = self.multilistbox.tree.identify('item',event.x,event.y)
-    if item:
+    region = self.multilistbox.tree.identify("region", event.x, event.y)
+    if region=='cell':
+      item = self.multilistbox.tree.identify('item',event.x,event.y)
       mounted=self.multilistbox.tree.item(item,'values')[2]=='X'
-      self.encfsumount() if mounted else self.encfsmount()
+      if mounted:
+        self.encfsumount()
+      elif self.key('CTRL',event):
+        self.onDelete()
+      else:
+        self.encfsmount()
+    elif region=='nothing':
+      self.onAdd()
+    elif region in ('heading','separator'):
+      pass
+    else:
+      messagebox.showwarning(_("Region"),f"{_('Region')}: {region}")
+      return
     
+    shift  = ((event.state & 0x0001) != 0)
+    ctrl  = ((event.state & 0x0004) != 0)
+    L_alt  = ((event.state & 0x0008) != 0)
+    win  = ((event.state & 0x0080) != 0)
+      
   def encfsmount(self):
     def err(prefix,msg):
       return "\n{0}: {1}".format(prefix,msg) if msg else ''
